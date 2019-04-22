@@ -12,6 +12,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	self.input.delegate = self;
+	[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(limit) userInfo:nil repeats:YES];
 	self.flags = [[UIView alloc] initWithFrame:CGRectMake(30, 70, 50, 35)];
 	self.input = [[UITextField alloc] initWithFrame:CGRectMake(100, 70, 185, 35)];
 	self.input.borderStyle = 1.0;
@@ -24,14 +25,13 @@
 	int x = 4;
 	[self.input resignFirstResponder];
 	unsigned long length = self.input.text.length;
-	
-	if(length >= 11 && length <= 13){
-	if(![[self.input.text substringToIndex:1] isEqualToString:@"+"]){
-		self.input.text = [NSMutableString stringWithFormat:@"+%@", self.input.text];
-		length++;
-	}
-	else if([[self.input.text substringToIndex:3] isEqualToString:@"+77"]  && length == 12){
-		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_KZ"].CGImage;
+	if(length >= 11 && length <= 14){
+		if(![[self.input.text substringToIndex:1] isEqualToString:@"+"]){
+			self.input.text = [NSMutableString stringWithFormat:@"+%@", self.input.text];
+			length++;
+		}
+	if([[self.input.text substringToIndex:2] isEqualToString:@"+7"]){
+		if([[self.input.text substringToIndex:3] isEqualToString:@"+77"]){
 	   	x = 2;
 		NSMutableString *new = [NSMutableString stringWithString:self.input.text];
 		[new insertString:@"(" atIndex:2];
@@ -39,47 +39,46 @@
 		[new insertString:@" " atIndex:10];
 		[new insertString:@" " atIndex:13];
 		self.input.text = new;
+		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_KZ"].CGImage;
+		}
+		else{
+				x = 2;
+				NSMutableString *new = [NSMutableString stringWithString:self.input.text];
+				[new insertString:@"(" atIndex:2];
+				[new insertString:@")" atIndex:6];
+				[new insertString:@" " atIndex:10];
+				[new insertString:@" " atIndex:13];
+				self.input.text = new;
+				self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_RU"].CGImage;
+		}
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+993"]  && length == 12){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+993"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_TM"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+373"]  && length == 12){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+373"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_MD"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+374"]  && length == 12){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+374"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_AM"].CGImage;
 	}
-	if([[self.input.text substringToIndex:4] isEqualToString:@"+375"]  && length == 13){
+	if([[self.input.text substringToIndex:4] isEqualToString:@"+375"]){
 			self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_BY"].CGImage;
 		}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+380"]  && length == 13){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+380"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_UA"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+992"]  && length == 13){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+992"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_TJ"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+994"]  && length == 13){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+994"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_AZ"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+996"]  && length == 13){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+996"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_KG"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:4] isEqualToString:@"+998"]  && length == 13){
+	else if([[self.input.text substringToIndex:4] isEqualToString:@"+998"]){
 		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_UZ"].CGImage;
 	}
-	else if([[self.input.text substringToIndex:2] isEqualToString:@"+7"]){
-		if(length == 12){
-		x = 2;
-		NSMutableString *new = [NSMutableString stringWithString:self.input.text];
-		[new insertString:@"(" atIndex:2];
-		[new insertString:@")" atIndex:6];
-		[new insertString:@" " atIndex:10];
-		[new insertString:@" " atIndex:13];
-		self.input.text = new;
-		self.flags.layer.contents = (id)[UIImage imageNamed:@"flag_RU"].CGImage;
-		}
-	}
-	
 	if (length - x == 9 && x == 4) {
 		NSMutableString *new = [NSMutableString stringWithString:self.input.text];
 		[new insertString:@"(" atIndex:4];
@@ -95,13 +94,19 @@
 			[new insertString:@"-" atIndex:11];
 			self.input.text = new;
 		}
-	}
-	else{
-		self.flags.layer.contents = nil;
-		if(length != 0){
-		self.input.text = @"неправильный ввод";
-			}
-	}
+    }
+		else if (length == 0) {
+			self.flags.layer.contents = nil;
+		}
+}
+-(void)limit{
+if([self.input.text length] >= 14){
+	NSRange match = [self.input.text rangeOfString: @"(" options: NSLiteralSearch ||
+			 NSCaseInsensitiveSearch];
+	if(match.length == 0){
+	self.input.text = [self.input.text substringWithRange:NSMakeRange(0, 13)];
+    }
+}
 }
 -(void)dealloc{
 	[self.input release];
